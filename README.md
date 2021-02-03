@@ -184,3 +184,13 @@ Use the config above:
 - take a look at the checks and find the graphical representation of your flow.
 
 ![Image of the graphical representation of the workflow](img/flow.png)
+
+## Artifacts
+When your build is finished you might want to offer some artifacts for a download. This could be the application you just build, test results or anything else that is useful for you or your users.
+
+```
+  - uses: actions/upload-artifact@v2
+    with:
+      name: deploy-script
+      path: deploy.sh
+```
