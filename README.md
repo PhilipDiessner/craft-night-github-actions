@@ -195,6 +195,37 @@ When your build is finished you might want to offer some artifacts for a downloa
       path: deploy.sh
 ```
 
-## Task
+### Task
 Add the code snippet to a new PR and find the deploy.sh artifact. Then update the action to upload more than one file.
 
+## Docker
+Docker is available without any additional effort.
+
+### Task
+Add a step, that build a docker image, upload this as an artifacts and download the artifact to run it locally.
+
+*Hint*
+
+<!-- You can export a docker image with `docker save <imageId> > filename` and import it using `docker load -i <filename>`. -->
+
+## Caching
+When application are built, we usually need quite some dependencies and we need to download them in every build. In order to save time a speed up the feedback circle we can cache our dependencies:
+
+```
+- name: Cache node modules
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-node-modules
+      with:
+        # npm cache files are stored in `~/.npm` on Linux/macOS
+        path: ~/.npm
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+
+```
+
+### Task
+Cache the dependencies!
