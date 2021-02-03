@@ -174,3 +174,13 @@ jobs:
         uses: actions/checkout@v2
       - name: deploy
 ```
+### Task
+Use the config above:
+
+- add it to your build.yml
+- create a branch
+- commit and push the change
+- create a PR
+- take a look at the checks and find the graphical representation of your flow.
+
+[Image of the graphical representation of the workflow](img/flow.png)
