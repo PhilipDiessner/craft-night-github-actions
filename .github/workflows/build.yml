@@ -28,6 +28,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+      - name: test docker
+        run: docker ps -a
       - name: deploy
         run: ./deploy.sh
       - uses: actions/upload-artifact@v2
