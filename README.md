@@ -139,3 +139,38 @@ Create a nightly build event that builds the project and runs all tests using th
 **Hint:**
 
 <!-- _You'll have to create a new workflow file (yml)._ -->
+
+## Multiple Jobs
+If you want to build, test and deploy in different phases you ca do so, by defining multiple Jobs. But you usually don't want to deploy, if the build or test job fails. You can implement this by defining, that your job `needs` another job:
+
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: run tests
+        env:
+          secret: ${{ secrets.SOME_SECRET }}
+        run: npm build
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ 8, 10, 12 ]
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: run tests
+        env:
+          secret: ${{ secrets.SOME_SECRET }}
+        run: npx jest
+  deploy:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: deploy
+```
