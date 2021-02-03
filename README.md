@@ -194,3 +194,7 @@ When your build is finished you might want to offer some artifacts for a downloa
       name: deploy-script
       path: deploy.sh
 ```
+
+## Task
+Add the code snippet to a new PR and find the deploy.sh artifact. Then update the action to upload more than one file.
+
