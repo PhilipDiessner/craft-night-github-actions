@@ -139,3 +139,93 @@ Create a nightly build event that builds the project and runs all tests using th
 **Hint:**
 
 <!-- _You'll have to create a new workflow file (yml)._ -->
+
+## Multiple Jobs
+If you want to build, test and deploy in different phases you ca do so, by defining multiple Jobs. But you usually don't want to deploy, if the build or test job fails. You can implement this by defining, that your job `needs` another job:
+
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: run tests
+        env:
+          secret: ${{ secrets.SOME_SECRET }}
+        run: npm build
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ 8, 10, 12 ]
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: run tests
+        env:
+          secret: ${{ secrets.SOME_SECRET }}
+        run: npx jest
+  deploy:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: deploy
+```
+### Task
+Use the config above:
+
+- add it to your build.yml
+- create a branch
+- commit and push the change
+- create a PR
+- take a look at the checks and find the graphical representation of your flow.
+
+![Image of the graphical representation of the workflow](img/flow.png)
+
+## Artifacts
+When your build is finished you might want to offer some artifacts for a download. This could be the application you just build, test results or anything else that is useful for you or your users.
+
+```
+  - uses: actions/upload-artifact@v2
+    with:
+      name: deploy-script
+      path: deploy.sh
+```
+
+### Task
+Add the code snippet to a new PR and find the deploy.sh artifact. Then update the action to upload more than one file.
+
+## Docker
+Docker is available without any additional effort.
+
+### Task
+Add a step, that build a docker image, upload this as an artifacts and download the artifact to run it locally.
+
+*Hint*
+
+<!-- You can export a docker image with `docker save <imageId> > filename` and import it using `docker load -i <filename>`. -->
+
+## Caching
+When application are built, we usually need quite some dependencies and we need to download them in every build. In order to save time a speed up the feedback circle we can cache our dependencies:
+
+```
+- name: Cache node modules
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-node-modules
+      with:
+        # npm cache files are stored in `~/.npm` on Linux/macOS
+        path: ~/.npm
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+
+```
+
+### Task
+Cache the dependencies!
