@@ -183,4 +183,4 @@ Use the config above:
 - create a PR
 - take a look at the checks and find the graphical representation of your flow.
 
-[Image of the graphical representation of the workflow](img/flow.png)
+![Image of the graphical representation of the workflow](img/flow.png)
