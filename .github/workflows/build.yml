@@ -3,10 +3,17 @@ on: pull_request
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [8, 10, 12]
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: run tests
+      - name: run js test
         env:
           super_secret: ${{secrets.test}}
         run: npx jest
+      - name: run python test
+        env:
+          SECRET: ${{secrets.test}}
+        run: python test.py
