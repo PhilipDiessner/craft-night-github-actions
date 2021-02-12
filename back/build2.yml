@@ -1,0 +1,32 @@
+name: Silpion Craft-Night example
+on: pull_request
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.8]
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: run python vers
+        run: python3 -v
+      - name: Setup node
+        env:
+          secret: ${{ secrets.test}}
+        run: npm build
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: run js test
+        env:
+          super_secret: ${{secrets.test}}
+        run: npx jest
+      - name: run python test
+        env:
+          SECRET: ${{secrets.test}}
+        run: python3 test.py
