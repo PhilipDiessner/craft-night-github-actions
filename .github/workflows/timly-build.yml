@@ -13,6 +13,8 @@ jobs:
         env:
           super_secret: ${{secrets.test}}
         run: npx jest
+      - name: run python vers
+        run: python -v
       - name: run python test
         env:
           SECRET: ${{secrets.test}}
