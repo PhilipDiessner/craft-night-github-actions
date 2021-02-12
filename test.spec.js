@@ -1,5 +1,5 @@
 describe('example', function() {
   it('should check secret', function() {
-    expect(420).toBe(process.env.super_secret)
+    expect(process.env.super_secret).toBe(420)
   })
 })
