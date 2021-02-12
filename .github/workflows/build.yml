@@ -7,4 +7,6 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - name: run tests
+        env:
+          super_secret: ${{secrets.test}}
         run: npx jest
