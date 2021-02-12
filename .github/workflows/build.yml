@@ -9,13 +9,17 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
       - name: run js test
         env:
           super_secret: ${{secrets.test}}
         run: npx jest
       - name: run python vers
-        run: python -v
+        run: python3 -v
       - name: run python test
         env:
           SECRET: ${{secrets.test}}
-        run: python test.py
+        run: python3 test.py
