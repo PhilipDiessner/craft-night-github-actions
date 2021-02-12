@@ -15,6 +15,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: run python vers
         run: python3 -v
+      - name: Setup node
+        env:
+          secret: ${{ secrets.test}}
+        run: npm build
   test:
     runs-on: ubuntu-latest
     steps:
