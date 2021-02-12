@@ -1,25 +1,40 @@
-name: Silpion Craft-Night example
+name: Silpion Craft-Night offical example
 on: pull_request
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.6, 3.8]
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: run js test
+      - name: run tests
         env:
-          super_secret: ${{secrets.test}}
+          secret: ${{ secrets.SOME_SECRET }}
+        run: npm build
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ 8, 10, 12 ]
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: run tests
+        env:
+          secret: ${{ secrets.SOME_SECRET }}
         run: npx jest
-      - name: run python vers
-        run: python3 -v
-      - name: run python test
-        env:
-          SECRET: ${{secrets.test}}
-        run: python3 test.py
+  deploy:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: test docker
+        run: docker ps -a
+      - name: deploy
+        run: ./deploy.sh
+      - uses: actions/upload-artifact@v2
+        with:
+          name: deploy-script
+          path: deploy.sh
+
+
