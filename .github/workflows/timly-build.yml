@@ -1,4 +1,4 @@
-name: Silpion Craft-Night example
+name: Silpion Craft-Night timely example
 on:
   schedule:
     # * is a special character in YAML so you have to quote this string
